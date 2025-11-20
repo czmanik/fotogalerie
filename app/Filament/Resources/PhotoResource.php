@@ -65,6 +65,20 @@ class PhotoResource extends Resource
                 ->searchable()
                 ->columnSpanFull(), // Aby to bylo přes celou šířku
 
+                Forms\Components\Select::make('people')
+                ->label('Osobnosti na fotce')
+                ->relationship('people', 'last_name') // Hledat podle příjmení
+                ->getOptionLabelFromRecordUsing(fn ($record) => "{$record->first_name} {$record->last_name}")
+                ->multiple() // Může jich tam být víc
+                ->preload()
+                ->searchable()
+                ->createOptionForm([ // Rychlé vytvoření nové osoby přímo z fotky!
+                    Forms\Components\TextInput::make('first_name')->required(),
+                    Forms\Components\TextInput::make('last_name')->required(),
+                    Forms\Components\TagsInput::make('categories'),
+                ])
+                ->columnSpanFull(),
+
                 Toggle::make('is_visible')
                     ->label('Zveřejnit na webu')
                     ->default(true)

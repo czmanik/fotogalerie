@@ -86,4 +86,10 @@ class Photo extends Model implements HasMedia
     {
         return $this->hasMany(Photo::class, 'parent_id');
     }
+
+    // Fotka obsahuje mnoho lidí
+    public function people(): BelongsToMany
+    {
+        return $this->belongsToMany(Person::class, 'photo_person');
+    }
 }

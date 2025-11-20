@@ -39,8 +39,29 @@ class ProjectResource extends Resource
 
                                 Forms\Components\Textarea::make('description')
                                     ->columnSpanFull(),
+
+                                Forms\Components\Placeholder::make('people_list')
+                                    ->label('Osobnosti v tomto projektu')
+                                    ->content(function ($record) {
+                                        // $record je aktuální Projekt
+                                        if (!$record) return 'Uložte projekt pro zobrazení osobností.';
+
+                                        // Získáme ID všech fotek v projektu
+                                        $photoIds = $record->photos()->pluck('photos.id');
+                                        
+                                        // Najdeme lidi, kteří jsou na těchto fotkách (unikátně)
+                                        $people = \App\Models\Person::whereHas('photos', function ($query) use ($photoIds) {
+                                            $query->whereIn('photos.id', $photoIds);
+                                        })->get();
+
+                                        if ($people->isEmpty()) return 'Zatím žádné přiřazené osobnosti.';
+
+                                        // Vypíšeme je jako seznam jmen
+                                        return $people->map(fn($p) => $p->full_name . " (" . implode(', ', $p->categories ?? []) . ")")->join(', ');
+                                    }),
                             ]),
                     ])->columnSpan(2),
+
 
                 // Pravé sloupce (Nastavení)
                 Forms\Components\Group::make()
