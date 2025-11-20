@@ -10,6 +10,7 @@ use Spatie\MediaLibrary\InteractsWithMedia;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany; 
 
 class Photo extends Model implements HasMedia
 {
@@ -43,6 +44,11 @@ class Photo extends Model implements HasMedia
                 $photo->user_id = Auth::id();
             }
         });
+    }
+
+    public function projects(): BelongsToMany
+    {
+        return $this->belongsToMany(Project::class, 'project_photo');
     }
 
     public function registerMediaConversions(Media $media = null): void
