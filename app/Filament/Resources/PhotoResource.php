@@ -36,6 +36,7 @@ class PhotoResource extends Resource
                     ->image()
                     ->imageEditor()
                     ->required()
+                    ->acceptedFileTypes(['image/jpeg', 'image/png', 'image/webp', 'image/tiff'])
                     ->columnSpanFull(),
 
                 // --- Sekce TEXTY ---
@@ -55,6 +56,14 @@ class PhotoResource extends Resource
                     ->searchable()
                     ->preload()
                     ->placeholder('Vyberte hlavní fotku (pokud toto je varianta)'),
+
+                Select::make('projects')
+                ->label('Přiřadit do projektů')
+                ->relationship('projects', 'title') // Vazba na projekty
+                ->multiple() // Fotka může být ve více projektech
+                ->preload()
+                ->searchable()
+                ->columnSpanFull(), // Aby to bylo přes celou šířku
 
                 Toggle::make('is_visible')
                     ->label('Zveřejnit na webu')

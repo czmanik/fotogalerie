@@ -28,9 +28,8 @@ class PhotosRelationManager extends RelationManager
     {
         return $table
             ->recordTitleAttribute('title')
-            ->reorderable('sort_order') // Umožní drag&drop řazení
+            ->reorderable('sort_order') 
             ->columns([
-                // Náhled fotky
                 SpatieMediaLibraryImageColumn::make('media')
                     ->collection('default')
                     ->conversion('thumb')
@@ -38,20 +37,33 @@ class PhotosRelationManager extends RelationManager
                 
                 Tables\Columns\TextColumn::make('title')
                     ->label('Název'),
+
+                Tables\Columns\TextColumn::make('id') 
+                    ->label('ID')
+                    ->sortable(),
                     
                 Tables\Columns\IconColumn::make('is_visible')
                     ->boolean()
                     ->label('Viditelné'),
             ])
             ->headerActions([
-                // Tlačítko pro výběr existujících fotek
+                // 1. Tlačítko pro vytvoření NOVÉ fotky rovnou v projektu
+                Tables\Actions\CreateAction::make()
+                    ->label('Nahrát novou fotku')
+                    ->modalHeading('Nahrát fotku do projektu'),
+
+                // 2. Tlačítko pro výběr EXISTUJÍCÍ fotky (Opravené)
                 Tables\Actions\AttachAction::make()
                     ->preloadRecordSelect()
                     ->multiple()
-                    ->label('Přidat fotky'),
+                    ->label('Vybrat z galerie')
+                    // Co se má zobrazit jako hlavní text v seznamu (použijeme název)
+                    ->recordTitleAttribute('title')
+                    // TADY JE ZMĚNA: Povolíme vyhledávání podle ID i podle Názvu
+                    ->recordSelectSearchColumns(['id', 'title']),
             ])
             ->actions([
-                // Tlačítko pro odebrání z projektu
+                Tables\Actions\EditAction::make(), // Hodí se moci fotku rovnou upravit
                 Tables\Actions\DetachAction::make()
                     ->label('Odebrat'),
             ]);

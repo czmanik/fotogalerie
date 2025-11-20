@@ -46,6 +46,11 @@ class Photo extends Model implements HasMedia
         });
     }
 
+    public function getTitleWithIdAttribute(): string
+    {
+        return $this->id . ' - ' . ($this->title ?? 'Bez názvu');
+    }
+
     public function projects(): BelongsToMany
     {
         return $this->belongsToMany(Project::class, 'project_photo');
