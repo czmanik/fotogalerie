@@ -6,8 +6,6 @@
 .idea
 .vscode
 
-composer.json
-composer.lock
 Homestead.yaml
 Homestead.json
 npm-debug.log
