@@ -10,15 +10,14 @@ class PhotoSlot extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['start_at', 'is_booked'];
+    protected $fillable = ['start_at', 'status', 'title', 'description', 'price'];
     
     protected $casts = [
-        'start_at' => 'datetime', 
-        'is_booked' => 'boolean'
+        'start_at' => 'datetime',
+        'price' => 'decimal:2',
     ];
 
-    // Termín může mít jednu zprávu (objednávku)
-    public function message(): HasOne
+    public function message()
     {
         return $this->hasOne(Message::class);
     }
