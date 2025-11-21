@@ -27,6 +27,7 @@
                 <a href="{{ route('projects.index') }}" class="{{ request()->routeIs('projects.*') ? 'text-amber-500' : 'text-gray-400 hover:text-white' }} transition">Projekty</a>
                 <a href="{{ route('people.index') }}" class="{{ request()->routeIs('people.*') ? 'text-amber-500' : 'text-gray-400 hover:text-white' }} transition">Osobnosti</a>
                 <a href="{{ route('about') }}" class="{{ request()->routeIs('about') ? 'text-amber-500' : 'text-gray-400 hover:text-white' }} transition">O mně</a>
+                <a href="{{ route('booking') }}" class="text-black bg-amber-500 px-3 py-1 rounded hover:bg-white transition">Rezervovat focení</a>
                 <a href="{{ route('contact') }}" class="{{ request()->routeIs('contact') ? 'text-amber-500' : 'text-gray-400 hover:text-white' }} transition">Kontakt</a>
             </nav>
 

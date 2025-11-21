@@ -32,27 +32,7 @@
                 </div>
             </div>
 
-            <div class="bg-gray-900 p-8 border border-gray-800">
-                <h2 class="text-2xl font-bold text-white mb-6">Napište mi</h2>
-                <form action="#" method="POST" class="space-y-6">
-                    @csrf
-                    <div>
-                        <label class="block text-gray-500 text-xs uppercase tracking-widest mb-2">Jméno</label>
-                        <input type="text" class="w-full bg-gray-800 border border-gray-700 text-white px-4 py-3 focus:outline-none focus:border-amber-500 transition">
-                    </div>
-                    <div>
-                        <label class="block text-gray-500 text-xs uppercase tracking-widest mb-2">Email</label>
-                        <input type="email" class="w-full bg-gray-800 border border-gray-700 text-white px-4 py-3 focus:outline-none focus:border-amber-500 transition">
-                    </div>
-                    <div>
-                        <label class="block text-gray-500 text-xs uppercase tracking-widest mb-2">Zpráva</label>
-                        <textarea rows="4" class="w-full bg-gray-800 border border-gray-700 text-white px-4 py-3 focus:outline-none focus:border-amber-500 transition"></textarea>
-                    </div>
-                    <button type="submit" class="w-full bg-amber-500 text-black font-bold uppercase tracking-widest py-4 hover:bg-amber-400 transition">
-                        Odeslat zprávu
-                    </button>
-                </form>
-            </div>
+            <livewire:contact-form />
 
         </div>
     </div>
