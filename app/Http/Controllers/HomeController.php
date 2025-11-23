@@ -17,22 +17,41 @@ class HomeController extends Controller
      */
     public function index(): View
     {
+        $today = now();
+
         return view('home', [
-            // 6 vybraných projektů pro "Portfolio" sekci na hlavní straně
+            // 1. Projekty (stále platí)
             'featured_projects' => Project::where('visibility', 'public')
                 ->orderBy('sort_order')
-                ->take(6)
-                ->with('coverPhoto') // Eager loading pro rychlost
+                ->take(3) // Snížíme na 3, ať stránka není moc dlouhá
+                ->with('coverPhoto')
                 ->get(),
                 
-            // Nejbližší výstavy (budoucí nebo probíhající)
+            // 2. Výstavy (stále platí)
             'upcoming_exhibitions' => Exhibition::where('is_visible', true)
                 ->where(function($query) {
                     $query->whereDate('end_date', '>=', now())
                           ->orWhereNull('end_date');
                 })
                 ->orderBy('start_date')
-                ->take(3)
+                ->take(1) // Stačí jen ta úplně nejbližší
+                ->get(),
+
+            // 3. NOVÉ: Poslední článek
+            'latest_article' => Article::where('is_visible', true)
+                ->orderBy('published_at', 'desc')
+                ->first(),
+
+            // 4. NOVÉ: Náhodný výběr fotek (Inspirace)
+            'random_photos' => \App\Models\Photo::where('is_visible', true)
+                ->inRandomOrder()
+                ->take(8)
+                ->get(),
+
+            // 5. NOVÉ: Oslavenec dne
+            'birthday_people' => Person::whereMonth('birth_date', $today->month)
+                ->whereDay('birth_date', $today->day)
+                ->with('avatar')
                 ->get(),
         ]);
     }

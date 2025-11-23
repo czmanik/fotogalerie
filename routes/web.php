@@ -7,7 +7,7 @@ use App\Livewire\PeoplePage;
 
 // Veřejné stránky
 Route::get('/', [HomeController::class, 'index'])->name('home');
-
+Route::view('/partneri', 'partners')->name('partners');
 Route::get('/projekty', [HomeController::class, 'projects'])->name('projects.index');
 Route::get('/projekty/{slug}', [HomeController::class, 'projectShow'])->name('projects.show');
 

@@ -70,19 +70,32 @@
         {{ $slot }}
     </main>
 
-    <footer class="bg-black py-12 border-t border-gray-800 mt-12">
-        <div class="container mx-auto px-4 text-center">
-            <h3 class="text-xl font-semibold text-white mb-4">Martin Beck</h3>
-            <p class="text-gray-500 text-sm mb-6">Fotografie, které vypráví příběhy.</p>
+    <footer class="bg-black py-16 border-t border-gray-800 mt-auto">
+        <div class="container mx-auto px-4">
             
-            <div class="flex justify-center space-x-6 mb-8">
-                <a href="#" class="text-gray-400 hover:text-white transition">Instagram</a>
-                <a href="#" class="text-gray-400 hover:text-white transition">Facebook</a>
+            <div class="mb-12 pb-12 border-b border-gray-800 flex flex-col md:flex-row items-center justify-between gap-6">
+                <span class="text-xs text-gray-600 uppercase tracking-widest">Partneři projektu</span>
+                <div class="flex gap-8 grayscale opacity-50 hover:opacity-100 transition">
+                    <div class="w-8 h-8 bg-gray-800 rounded-full"></div>
+                    <div class="w-8 h-8 bg-gray-800 rounded-full"></div>
+                    <div class="w-8 h-8 bg-gray-800 rounded-full"></div>
+                </div>
+                <a href="{{ route('partners') }}" class="text-xs text-gray-500 hover:text-white transition">Zobrazit vše</a>
             </div>
 
-            <p class="text-gray-600 text-xs">
-                &copy; {{ date('Y') }} Martin Beck. Všechna práva vyhrazena.
-            </p>
+            <div class="text-center">
+                <h3 class="text-xl font-semibold text-white mb-4 tracking-widest uppercase">Martin Beck</h3>
+                <p class="text-gray-500 text-sm mb-8">Fotografie, které vypráví příběhy.</p>
+                
+                <div class="flex justify-center space-x-6 mb-8">
+                    <a href="#" class="text-gray-400 hover:text-amber-500 transition">Instagram</a>
+                    <a href="#" class="text-gray-400 hover:text-amber-500 transition">Facebook</a>
+                </div>
+
+                <p class="text-gray-700 text-xs">
+                    &copy; {{ date('Y') }} Martin Beck.
+                </p>
+            </div>
         </div>
     </footer>
 
