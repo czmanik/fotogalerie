@@ -70,18 +70,51 @@ class HomeController extends Controller
     }
 
     /**
-     * Detail konkrétního projektu
+     * Detail projektu s kontrolou hesla
      */
     public function projectShow(string $slug): View
     {
+        // 1. Najdeme projekt (povolíme public i password, ale ne private)
         $project = Project::where('slug', $slug)
-            ->where('visibility', '!=', 'private') // Ukážeme i password protected, heslo pořešíme v View
-            ->with(['photos' => function($query) {
-                $query->orderBy('sort_order'); // Fotky seřazené dle pivotu
-            }])
+            ->whereIn('visibility', ['public', 'password']) 
             ->firstOrFail();
 
+        // 2. Pokud je zaheslovaný
+        if ($project->visibility === 'password') {
+            // Zkontrolujeme, zda už uživatel nemá "odemčeno" v session
+            $sessionKey = 'project_unlocked_' . $project->id;
+            
+            if (!session($sessionKey)) {
+                // Pokud NEMA odemčeno, zobrazíme formulář pro zadání hesla
+                // Vrátíme speciální view, ne detail projektu
+                return view('projects.password', compact('project'));
+            }
+        }
+
+        // 3. Pokud je veřejný nebo odemčený, načteme data a zobrazíme
+        $project->load(['photos' => function($query) {
+            $query->orderByPivot('sort_order');
+        }]);
+
         return view('projects.show', compact('project'));
+    }
+
+    /**
+     * Zpracování hesla (POST request)
+     */
+    public function unlockProject(Request $request, string $slug)
+    {
+        $project = Project::where('slug', $slug)->firstOrFail();
+
+        if ($request->input('password') === $project->password) {
+            // Heslo souhlasí -> Uložíme do session
+            session(['project_unlocked_' . $project->id => true]);
+            
+            return redirect()->route('projects.show', $slug);
+        }
+
+        // Heslo nesouhlasí -> Zpět s chybou
+        return back()->withErrors(['password' => 'Neplatné heslo.']);
     }
 
     /**

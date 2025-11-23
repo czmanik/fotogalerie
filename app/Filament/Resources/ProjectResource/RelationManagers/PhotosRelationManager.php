@@ -28,7 +28,8 @@ class PhotosRelationManager extends RelationManager
     {
         return $table
             ->recordTitleAttribute('title')
-            ->reorderable('sort_order') 
+            ->reorderable('project_photo.sort_order') 
+            ->defaultSort('project_photo.sort_order')
             ->columns([
                 SpatieMediaLibraryImageColumn::make('media')
                     ->collection('default')
@@ -63,7 +64,13 @@ class PhotosRelationManager extends RelationManager
                     ->recordSelectSearchColumns(['id', 'title']),
             ])
             ->actions([
-                Tables\Actions\EditAction::make(), // Hodí se moci fotku rovnou upravit
+                // Vlastní akce pro přechod na editaci fotky
+                Tables\Actions\Action::make('edit_photo')
+                    ->label('Upravit')
+                    ->icon('heroicon-m-pencil-square')
+                    ->url(fn (\App\Models\Photo $record): string => \App\Filament\Resources\PhotoResource::getUrl('edit', ['record' => $record])),
+
+                // Odpojení z projektu
                 Tables\Actions\DetachAction::make()
                     ->label('Odebrat'),
             ]);
