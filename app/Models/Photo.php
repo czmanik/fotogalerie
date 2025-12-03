@@ -10,7 +10,8 @@ use Spatie\MediaLibrary\InteractsWithMedia;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Database\Eloquent\Relations\BelongsToMany; 
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Support\Str;
 
 class Photo extends Model implements HasMedia
 {
@@ -42,6 +43,25 @@ class Photo extends Model implements HasMedia
         static::creating(function ($photo) {
             if (Auth::check() && !$photo->user_id) {
                 $photo->user_id = Auth::id();
+            }
+        });
+
+        static::saving(function ($photo) {
+            if (empty($photo->slug)) {
+                $baseSlug = Str::slug($photo->title ?? "photo-{$photo->id}");
+                if (empty($baseSlug)) {
+                    $baseSlug = "photo-" . uniqid();
+                }
+
+                $slug = $baseSlug;
+                $counter = 1;
+
+                while (Photo::where('slug', $slug)->where('id', '!=', $photo->id)->exists()) {
+                    $slug = "{$baseSlug}-{$counter}";
+                    $counter++;
+                }
+
+                $photo->slug = $slug;
             }
         });
     }
