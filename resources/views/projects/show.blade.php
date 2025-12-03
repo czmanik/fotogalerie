@@ -1,7 +1,5 @@
 <x-layout :title="$project->title">
     
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/fslightbox/3.0.9/index.min.js"></script>
-
     <div class="bg-gray-900 border-b border-gray-800 pt-12 pb-16">
         <div class="container mx-auto px-4 text-center">
             <a href="{{ route('projects.index') }}" class="inline-flex items-center text-gray-500 hover:text-white mb-6 text-sm uppercase tracking-wider transition">
@@ -29,8 +27,7 @@
             <div class="columns-1 md:columns-2 lg:columns-3 gap-4 space-y-4">
                 @foreach($project->photos as $photo)
                     <div class="break-inside-avoid">
-                        <a data-fslightbox="gallery" 
-                           href="{{ $photo->getFirstMediaUrl('default', 'large') }}"
+                        <a href="{{ route('photo.show', ['slug' => $photo->slug, 'projectId' => $project->id]) }}"
                            class="block relative group overflow-hidden">
                             
                             <img src="{{ $photo->getFirstMediaUrl('default', 'medium') }}" 
@@ -45,7 +42,7 @@
                                     </h3>
                                 @endif
                                 <p class="text-amber-500 text-sm mt-2 translate-y-4 group-hover:translate-y-0 transition duration-300 delay-100">
-                                    Zvětšit
+                                    Detail fotografie
                                 </p>
                             </div>
                         </a>

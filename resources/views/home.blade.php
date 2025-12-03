@@ -119,9 +119,11 @@
         <div class="columns-2 md:columns-4 gap-4 space-y-4">
             @foreach($random_photos as $photo)
                 <div class="break-inside-avoid overflow-hidden group relative">
-                    <img src="{{ $photo->getFirstMediaUrl('default', 'medium') }}" 
-                         class="w-full h-auto object-cover hover:opacity-80 transition duration-500 rounded-sm"
-                         loading="lazy" alt="Inspirace">
+                    <a href="{{ route('photo.show', $photo->slug) }}" class="block">
+                        <img src="{{ $photo->getFirstMediaUrl('default', 'medium') }}"
+                             class="w-full h-auto object-cover hover:opacity-80 transition duration-500 rounded-sm"
+                             loading="lazy" alt="Inspirace">
+                    </a>
                 </div>
             @endforeach
         </div>

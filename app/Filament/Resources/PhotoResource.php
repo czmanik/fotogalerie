@@ -44,6 +44,11 @@ class PhotoResource extends Resource
                     ->label('Název')
                     ->required(),
 
+                TextInput::make('slug')
+                    ->label('URL Slug')
+                    ->unique(ignoreRecord: true)
+                    ->helperText('Nechte prázdné pro automatické vygenerování.'),
+
                 Textarea::make('description')
                     ->label('Popis')
                     ->rows(3)
@@ -101,6 +106,11 @@ class PhotoResource extends Resource
                     ->searchable()
                     ->sortable()
                     ->weight('bold'),
+
+                TextColumn::make('slug')
+                    ->label('Slug')
+                    ->searchable()
+                    ->toggleable(isToggledHiddenByDefault: true),
 
                 TextColumn::make('user.name')
                     ->label('Autor')
