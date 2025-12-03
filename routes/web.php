@@ -13,6 +13,7 @@ Route::get('/projekty/{slug}', [HomeController::class, 'projectShow'])->name('pr
 // Route::get('/osobnosti', [HomeController::class, 'people'])->name('people.index');
 Route::get('/osobnosti/{id}', [HomeController::class, 'personShow'])->name('people.show'); // Zde použijeme ID
 Route::get('/osobnosti', PeoplePage::class)->name('people.index');
+Route::get('/foto/{slug}', \App\Livewire\PhotoDetail::class)->name('photo.show');
 Route::get('/o-mne', [HomeController::class, 'about'])->name('about');
 Route::get('/kontakt', [HomeController::class, 'contact'])->name('contact');
 Route::get('/objednavka', BookingPage::class)->name('booking');
