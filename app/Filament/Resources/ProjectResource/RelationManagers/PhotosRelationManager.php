@@ -28,8 +28,30 @@ class PhotosRelationManager extends RelationManager
     {
         return $table
             ->recordTitleAttribute('title')
-            ->reorderable('project_photo.sort_order') 
-            ->defaultSort('project_photo.sort_order')
+            // Řešení konfliktu "Ambiguous column":
+            // Explicitně vyjmenujeme sloupce z tabulky `photos`, KROMĚ `photos.sort_order`.
+            // Místo toho načteme `project_photo.sort_order` pod aliasem `sort_order`.
+            // Tím zajistíme, že v celém dotazu existuje pouze jeden sloupec `sort_order` (ten z pivotu).
+            ->modifyQueryUsing(fn (\Illuminate\Database\Eloquent\Builder $query) =>
+                $query->select([
+                    'photos.id',
+                    'photos.user_id',
+                    'photos.parent_id',
+                    'photos.title',
+                    'photos.description',
+                    'photos.slug',
+                    'photos.is_visible',
+                    'photos.published_at',
+                    'photos.exif_data',
+                    'photos.captured_at',
+                    'photos.created_at',
+                    'photos.updated_at',
+                    'photos.deleted_at',
+                    'project_photo.sort_order as sort_order', // Pivot sort order
+                ])
+            )
+            ->reorderable('sort_order')
+            ->defaultSort('sort_order')
             ->columns([
                 SpatieMediaLibraryImageColumn::make('media')
                     ->collection('default')
