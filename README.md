@@ -1,63 +1,96 @@
-<<<<<<< HEAD
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Dokumentace systému Fotogalerie
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+Tento dokument slouží jako technický přehled systému pro vývojáře a AI asistenty (např. Gemini). Popisuje architekturu, datový model a klíčové procesy aplikace.
 
-## About Laravel
+## 1. Přehled technologií
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+Systém je postaven na moderním PHP stacku:
+*   **Framework:** Laravel 12 (PHP 8.4)
+*   **Admin Panel:** Filament PHP 3.2
+*   **Frontend Interaktivita:** Laravel Livewire
+*   **Správa souborů:** Spatie Media Library
+*   **Databáze:** MySQL
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## 2. Datový model a Entity
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+Jádrem systému jsou následující Eloquent modely umístěné v `app/Models`:
 
-## Learning Laravel
+### Photo (Fotografie)
+Centrální entita systému.
+*   **Atributy:** `title`, `description`, `slug` (unikátní URL), `is_visible`, `sort_order`, `captured_at`.
+*   **Media:** Využívá `Spatie\MediaLibrary` pro ukládání souborů (konverze `thumb`, `medium`, `large`).
+*   **Vztahy:**
+    *   `projects`: M:N relace s projekty (tabulka `project_photo`).
+    *   `people`: M:N relace s osobnostmi (tabulka `photo_person`).
+    *   `variants`: 1:N relace sama na sebe (`parent_id`) pro varianty téže fotky.
+*   **Logika:** Při uložení se automaticky generuje unikátní `slug`.
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework. You can also check out [Laravel Learn](https://laravel.com/learn), where you will be guided through building a modern Laravel application.
+### Project (Projekt)
+Kolekce fotografií s možností omezení přístupu.
+*   **Atributy:** `title`, `slug`, `description`, `visibility` (`public`, `password`, `private`), `password`, `sort_order`.
+*   **Vztahy:**
+    *   `photos`: M:N relace. V pivot tabulce se udržuje `sort_order` pro řazení fotek v rámci konkrétního projektu.
+    *   `coverPhoto`: Odkaz na úvodní fotku projektu.
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+### Person (Osobnost)
+Lidé zachycení na fotografiích.
+*   **Atributy:** `first_name`, `last_name`, `categories` (uloženo jako JSON - např. Herec, Zpěvák...), `bio`.
+*   **Vztahy:**
+    *   `avatar`: Odkaz na `Photo`, která slouží jako profilovka.
 
-## Laravel Sponsors
+### PhotoSlot & Message (Rezervační systém)
+Jednoduchý systém pro objednávání focení.
+*   **PhotoSlot:** Předdefinovaný termín (`start_at`, `status` - `free`, `pending`, `booked`).
+*   **Message:** Objednávka/zpráva vázaná na slot. Obsahuje kontaktní údaje klienta.
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+### Další entity
+*   **Exhibition:** Informace o výstavách (datum, místo).
+*   **Article:** Odkazy na články v médiích.
 
-### Premium Partners
+## 3. Funkcionalita a Logika
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+### 3.1 Veřejná část (Frontend)
 
-## Contributing
+Frontend je renderován pomocí Blade šablon a Livewire komponent. Hlavní logiku obsluhuje `HomeController`.
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+*   **Homepage:** Zobrazuje výběr projektů, nejbližší výstavu, náhodné fotky a "oslavence dne" (podle `birth_date`).
+*   **Projekty (`/projekty`):**
+    *   Detail projektu (`ProjectShow`) kontroluje viditelnost.
+    *   **Zaheslované projekty:** Pokud má projekt `visibility = 'password'`, systém vyžaduje zadání hesla. Po úspěšném zadání se uloží příznak do session (`project_unlocked_{id}`).
+*   **Osobnosti (`/osobnosti`):**
+    *   Řešeno přes Livewire komponentu `PeoplePage`.
+    *   Umožňuje filtrování podle kategorií (načítá se z JSON sloupce).
+    *   Detail osobnosti zobrazuje všechny fotky, na kterých je osoba označena.
 
-## Code of Conduct
+### 3.2 Detail fotky a Navigace (`PhotoDetail`)
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+Detail fotky (`/foto/{slug}`) je Livewire komponenta s pokročilou logikou navigace (předchozí/další fotka). Chování závisí na kontextu:
 
-## Security Vulnerabilities
+1.  **Kontext Projektu (`?projectId=X`):**
+    *   Pokud uživatel přijde z projektu, v URL se předává ID projektu.
+    *   Navigace listuje pouze fotkami v daném projektu.
+    *   **Řazení:** Respektuje `sort_order` definovaný v pivot tabulce projektu.
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+2.  **Globální kontext (Bez `projectId`):**
+    *   Pokud uživatel přijde z homepage nebo přímým odkazem.
+    *   **Řazení:** Náhodné, ale konzistentní během návštěvy.
+    *   **Implementace:** Do session se uloží `photo_gallery_seed` (náhodné číslo). Toto číslo se použije pro deterministické zamíchání (`shuffle`) všech dostupných ID fotek. Tím je zajištěno, že uživatel při klikání na "Další" neuvidí stejnou fotku dvakrát a může se vracet zpět.
 
-## License
+### 3.3 Rezervace (`BookingPage`)
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
-=======
-# fotogalerie
->>>>>>> 5af4ca483eeeeed38841807bb2e284a823ec7372
+Livewire komponenta pro výběr termínu.
+*   Zobrazuje volné sloty seskupené po měsících.
+*   Při odeslání formuláře se slot přepne do stavu `pending` a vytvoří se záznam v `Message`.
+
+## 4. Administrace (Filament)
+
+Administrace se nachází na `/admin`.
+*   Standardní CRUD operace pro všechny entity.
+*   Používá se plugin `spatie/laravel-medialibrary-plugin` pro nahrávání obrázků přímo ve formulářích.
+*   **Generování slugů:** Probíhá automaticky v modelu (observer `saving`), pokud není vyplněn ručně. Řeší duplicity přidáním čísla.
+
+## 5. Důležité poznámky pro vývoj
+
+*   **Přiřazování fotek:** Fotky lze nahrávat hromadně v sekci Fotografie a následně je přiřazovat k projektům nebo osobnostem.
+*   **Média:** Při změně definic konverzí (v `Photo.php`) je nutné přegenerovat obrázky pomocí `php artisan media-library:regenerate`.
+*   **Route Cache:** Systém používá `Route::view` a standardní kontrolery. Při změnách rout nezapomenout na `php artisan route:clear`.
