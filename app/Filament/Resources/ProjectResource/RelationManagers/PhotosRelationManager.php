@@ -28,8 +28,8 @@ class PhotosRelationManager extends RelationManager
     {
         return $table
             ->recordTitleAttribute('title')
-            ->reorderable('project_photo.sort_order') 
-            ->defaultSort('project_photo.sort_order')
+            ->reorderable('sort_order')
+            ->defaultSort('sort_order')
             ->columns([
                 SpatieMediaLibraryImageColumn::make('media')
                     ->collection('default')
