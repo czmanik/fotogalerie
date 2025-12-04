@@ -32,4 +32,5 @@ Thumbs.db
 /storage/logs
 /storage/debugbar
 
-/bootstrap/cache/*.php
+/bootstrap/cache/*.php/storage/mysql
+/storage/mysql

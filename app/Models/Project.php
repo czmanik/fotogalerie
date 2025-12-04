@@ -25,7 +25,7 @@ class Project extends Model
     public function photos(): BelongsToMany
     {
         return $this->belongsToMany(Photo::class, 'project_photo')
-                    ->withPivot('sort_order') // Chceme pracovat s pořadím v pivot tabulce
-                    ->orderByPivot('sort_order'); // Automaticky řadit podle pivotu
+                    ->withPivot('sort_order'); // Chceme pracovat s pořadím v pivot tabulce
+                    // ->orderByPivot('sort_order'); // Automaticky řadit podle pivotu - ODSTRANĚNO kvůli konfliktu v adminu (ambiguous column)
     }
 }
