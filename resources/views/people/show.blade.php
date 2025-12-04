@@ -1,5 +1,4 @@
 <x-layout :title="$person->full_name">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/fslightbox/3.0.9/index.min.js"></script>
 
     <div class="container mx-auto px-4 py-12">
         
@@ -55,8 +54,7 @@
                 <div class="columns-1 md:columns-2 lg:columns-3 gap-4 space-y-4">
                     @foreach($person->photos as $photo)
                         <div class="break-inside-avoid">
-                            <a data-fslightbox="person-gallery" 
-                               href="{{ $photo->getFirstMediaUrl('default', 'large') }}"
+                            <a href="{{ route('photo.show', $photo->slug) }}"
                                class="block relative group overflow-hidden">
                                 <img src="{{ $photo->getFirstMediaUrl('default', 'medium') }}" 
                                      alt="{{ $photo->title }}"
