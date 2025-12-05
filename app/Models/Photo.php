@@ -81,15 +81,18 @@ class Photo extends Model implements HasMedia
         $this->addMediaConversion('thumb')
               ->width(400)
               ->height(400)
-              ->sharpen(10);
+              ->sharpen(10)
+              ->nonQueued();
 
         $this->addMediaConversion('medium')
               ->width(1200)
-              ->responsive();
+              ->responsive()
+              ->nonQueued();
 
         $this->addMediaConversion('large')
               ->width(1920)
-              ->height(1080);
+              ->height(1080)
+              ->nonQueued();
     }
 
     public function user(): BelongsTo
