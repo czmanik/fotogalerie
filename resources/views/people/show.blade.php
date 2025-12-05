@@ -54,7 +54,7 @@
                 <div class="columns-1 md:columns-2 lg:columns-3 gap-4 space-y-4">
                     @foreach($person->photos as $photo)
                         <div class="break-inside-avoid">
-                            <a href="{{ route('photo.show', $photo->slug) }}"
+                            <a href="{{ route('photo.show', ['slug' => $photo->slug, 'personId' => $person->id]) }}"
                                class="block relative group overflow-hidden">
                                 <img src="{{ $photo->getFirstMediaUrl('default', 'medium') }}" 
                                      alt="{{ $photo->title }}"

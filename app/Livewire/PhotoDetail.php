@@ -4,6 +4,7 @@ namespace App\Livewire;
 
 use App\Models\Photo;
 use App\Models\Project;
+use App\Models\Person;
 use Livewire\Component;
 use Livewire\Attributes\Url;
 use Illuminate\Support\Facades\Session;
@@ -16,6 +17,9 @@ class PhotoDetail extends Component
 
     #[Url]
     public $projectId;
+
+    #[Url]
+    public $personId;
 
     public function mount($slug)
     {
@@ -58,6 +62,10 @@ class PhotoDetail extends Component
             return $this->getProjectAdjacentPhoto($direction);
         }
 
+        if ($this->personId) {
+            return $this->getPersonAdjacentPhoto($direction);
+        }
+
         return $this->getGlobalAdjacentPhoto($direction);
     }
 
@@ -78,6 +86,29 @@ class PhotoDetail extends Component
         $ids = $project->photos()
             ->where('photos.is_visible', true)
             ->orderByPivot('sort_order')
+            ->pluck('photos.id')
+            ->toArray();
+
+        return $this->findAdjacentId($ids, $direction);
+    }
+
+    /**
+     * Navigation within a Person context.
+     */
+    private function getPersonAdjacentPhoto($direction)
+    {
+        $person = Person::find($this->personId);
+
+        if (!$person) {
+            $this->personId = null;
+            return $this->getGlobalAdjacentPhoto($direction);
+        }
+
+        // Get all visible photo IDs for this person, ordered by captured_at/created_at
+        // Using captured_at as primary sort, created_at as fallback
+        $ids = $person->photos()
+            ->where('photos.is_visible', true)
+            ->orderBy('photos.created_at', 'desc')
             ->pluck('photos.id')
             ->toArray();
 
