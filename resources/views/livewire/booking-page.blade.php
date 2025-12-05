@@ -95,16 +95,35 @@
                                                 <span class="font-bold text-xl">{{ $slot->start_at->format('H:i') }}</span>
                                             </div>
 
-                                            @if($slot->title || $slot->price)
-                                                <div class="w-full border-t {{ $isSelected ? 'border-black/10' : 'border-gray-700' }} mt-2 pt-2 flex justify-between items-center text-xs">
-                                                    <span class="font-bold uppercase tracking-wider {{ $isSelected ? 'text-black' : 'text-amber-500' }}">
-                                                        {{ $slot->title ?? 'Focení' }}
-                                                    </span>
-                                                    
-                                                    @if($slot->price)
-                                                        <span class="font-mono font-bold {{ $isSelected ? 'text-black' : 'text-gray-400' }}">
-                                                            {{ number_format($slot->price, 0, ',', ' ') }} Kč
+                                            @if($slot->title || $slot->price || $slot->duration_minutes || $slot->location)
+                                                <div class="w-full border-t {{ $isSelected ? 'border-black/10' : 'border-gray-700' }} mt-2 pt-2 flex flex-col gap-1 text-xs text-left">
+                                                    <div class="flex justify-between items-center w-full">
+                                                        <span class="font-bold uppercase tracking-wider {{ $isSelected ? 'text-black' : 'text-amber-500' }}">
+                                                            {{ $slot->title ?? 'Focení' }}
                                                         </span>
+
+                                                        @if($slot->price)
+                                                            <span class="font-mono font-bold {{ $isSelected ? 'text-black' : 'text-gray-400' }}">
+                                                                {{ number_format($slot->price, 0, ',', ' ') }} Kč
+                                                            </span>
+                                                        @endif
+                                                    </div>
+
+                                                    @if($slot->duration_minutes || $slot->location)
+                                                        <div class="flex items-center gap-3 {{ $isSelected ? 'text-black/80' : 'text-gray-500' }} mt-1">
+                                                            @if($slot->duration_minutes)
+                                                                <span class="flex items-center gap-1">
+                                                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-3 h-3"><path fill-rule="evenodd" d="M10 18a8 8 0 1 0 0-16 8 8 0 0 0 0 16Zm.75-13a.75.75 0 0 0-1.5 0v5c0 .414.336.75.75.75h4a.75.75 0 0 0 0-1.5h-3.25V5Z" clip-rule="evenodd" /></svg>
+                                                                    {{ $slot->duration_minutes }} min
+                                                                </span>
+                                                            @endif
+                                                            @if($slot->location)
+                                                                <span class="flex items-center gap-1">
+                                                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-3 h-3"><path fill-rule="evenodd" d="m9.69 18.933.003.001C9.89 19.02 10 19.02 10 19.02s.11.001.307-.086l.002-.001.002-.001.001-.001a2.139 2.139 0 0 0 1.086-1.018l.002-.006.004-.012A9.778 9.778 0 0 0 12.872 13H15a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v7a2 2 0 0 0 2 2h2.128a9.78 9.78 0 0 0 1.464 4.89l.004.012.002.005a2.137 2.137 0 0 0 1.092 1.025Zm.03-9.526A1.75 1.75 0 1 1 8 9a1.75 1.75 0 0 1 1.72 1.407Z" clip-rule="evenodd" /></svg>
+                                                                    {{ $slot->location->getLabel() }}
+                                                                </span>
+                                                            @endif
+                                                        </div>
                                                     @endif
                                                 </div>
                                             @endif
@@ -162,6 +181,23 @@
                                         <p class="text-gray-400 text-sm mt-1 font-mono">
                                             Cena: <span class="text-white">{{ number_format($selectedSlotInfo->price, 0, ',', ' ') }} Kč</span>
                                         </p>
+                                    @endif
+
+                                    @if($selectedSlotInfo->duration_minutes || $selectedSlotInfo->location)
+                                        <div class="flex items-center gap-4 mt-3 text-gray-300 text-sm">
+                                            @if($selectedSlotInfo->duration_minutes)
+                                                <span class="flex items-center gap-1.5 bg-gray-800 px-2 py-1 rounded">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-4 h-4 text-amber-500"><path fill-rule="evenodd" d="M10 18a8 8 0 1 0 0-16 8 8 0 0 0 0 16Zm.75-13a.75.75 0 0 0-1.5 0v5c0 .414.336.75.75.75h4a.75.75 0 0 0 0-1.5h-3.25V5Z" clip-rule="evenodd" /></svg>
+                                                    {{ $selectedSlotInfo->duration_minutes }} min
+                                                </span>
+                                            @endif
+                                            @if($selectedSlotInfo->location)
+                                                <span class="flex items-center gap-1.5 bg-gray-800 px-2 py-1 rounded">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-4 h-4 text-amber-500"><path fill-rule="evenodd" d="m9.69 18.933.003.001C9.89 19.02 10 19.02 10 19.02s.11.001.307-.086l.002-.001.002-.001.001-.001a2.139 2.139 0 0 0 1.086-1.018l.002-.006.004-.012A9.778 9.778 0 0 0 12.872 13H15a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v7a2 2 0 0 0 2 2h2.128a9.78 9.78 0 0 0 1.464 4.89l.004.012.002.005a2.137 2.137 0 0 0 1.092 1.025Zm.03-9.526A1.75 1.75 0 1 1 8 9a1.75 1.75 0 0 1 1.72 1.407Z" clip-rule="evenodd" /></svg>
+                                                    {{ $selectedSlotInfo->location->getLabel() }}
+                                                </span>
+                                            @endif
+                                        </div>
                                     @endif
                                 </div>
 
