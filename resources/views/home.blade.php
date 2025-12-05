@@ -93,7 +93,7 @@
                     <a href="{{ route('projects.show', $project->slug) }}" class="group block">
                         <div class="aspect-[4/5] overflow-hidden bg-gray-800 relative mb-4">
                             @if($project->coverPhoto)
-                                <img src="{{ $project->coverPhoto->getFirstMediaUrl('default', 'medium') }}" 
+                                <img src="{{ $project->coverPhoto->getFirstMediaUrl('default', 'thumb') }}"
                                      alt="{{ $project->title }}" 
                                      class="w-full h-full object-cover transform group-hover:scale-105 transition duration-700 ease-in-out grayscale group-hover:grayscale-0">
                             @endif
@@ -120,7 +120,7 @@
             @foreach($random_photos as $photo)
                 <div class="break-inside-avoid overflow-hidden group relative">
                     <a href="{{ route('photo.show', $photo->slug) }}" class="block">
-                        <img src="{{ $photo->getFirstMediaUrl('default', 'medium') }}"
+                        <img src="{{ $photo->getFirstMediaUrl('default', 'thumb') }}"
                              class="w-full h-auto object-cover hover:opacity-80 transition duration-500 rounded-sm"
                              loading="lazy" alt="Inspirace">
                     </a>
