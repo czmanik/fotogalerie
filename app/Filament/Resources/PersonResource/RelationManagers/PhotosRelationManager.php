@@ -32,21 +32,47 @@ class PhotosRelationManager extends RelationManager
     {
         return $table
             ->recordTitleAttribute('title')
+            // Řešení konfliktu "Ambiguous column":
+            // Explicitně vyjmenujeme sloupce z tabulky `photos`, KROMĚ `photos.sort_order` (pokud by existoval).
+            // Hlavně načteme `photo_person.sort_order` pod aliasem `sort_order`.
+            ->modifyQueryUsing(fn (\Illuminate\Database\Eloquent\Builder $query) =>
+                $query->select([
+                    'photos.id',
+                    'photos.user_id',
+                    'photos.parent_id',
+                    'photos.title',
+                    'photos.description',
+                    'photos.slug',
+                    'photos.is_visible',
+                    'photos.published_at',
+                    'photos.exif_data',
+                    'photos.captured_at',
+                    'photos.created_at',
+                    'photos.updated_at',
+                    'photos.deleted_at',
+                    'photo_person.sort_order as sort_order', // Pivot sort order
+                ])
+            )
+            ->reorderable('sort_order')
+            ->defaultSort('sort_order')
             ->columns([
                 SpatieMediaLibraryImageColumn::make('media')
-                    ->label('Náhled')
                     ->collection('default')
                     ->conversion('thumb')
-                    ->height(60),
+                    ->label('Náhled'),
 
                 Tables\Columns\TextColumn::make('title')
                     ->label('Název')
                     ->searchable()
                     ->sortable(),
 
+                Tables\Columns\TextColumn::make('id')
+                    ->label('ID')
+                    ->sortable(),
+
                 Tables\Columns\IconColumn::make('is_visible')
-                    ->label('Viditelné')
-                    ->boolean(),
+                    ->boolean()
+                    ->label('Viditelné'),
             ])
             ->filters([
                 //
@@ -57,7 +83,21 @@ class PhotosRelationManager extends RelationManager
                     ->multiple()
                     ->label('Vybrat z galerie')
                     ->recordTitleAttribute('title')
-                    ->recordSelectSearchColumns(['id', 'title']),
+                    ->recordSelectSearchColumns(['id', 'title'])
+                    // Hook to ensure the new photo is added as the last one
+                    ->after(function ($livewire, $record) {
+                        // $livewire->getOwnerRecord() is the Person
+                        // $record is the attached Photo
+                        $person = $livewire->getOwnerRecord();
+                        // Find the current max sort order for this person's photos
+                        $maxOrder = $person->photos()->max('photo_person.sort_order') ?? 0;
+
+                        // Update the pivot record for the newly attached photo
+                        // We use updateExistingPivot to target the specific relation
+                        $person->photos()->updateExistingPivot($record->id, [
+                            'sort_order' => $maxOrder + 1
+                        ]);
+                    }),
             ])
             ->actions([
                 Action::make('set_avatar')

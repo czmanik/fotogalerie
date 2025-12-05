@@ -29,7 +29,8 @@ class Person extends Model
     // Osobnost je na mnoha fotkách
     public function photos(): BelongsToMany
     {
-        return $this->belongsToMany(Photo::class, 'photo_person');
+        return $this->belongsToMany(Photo::class, 'photo_person')
+            ->withPivot('sort_order');
     }
 
     // Osobnost má jednu hlavní profilovku (vybranou z fotek)
