@@ -16,19 +16,22 @@
 </head>
 <body class="bg-gray-900 text-gray-100 flex flex-col min-h-screen">
 
-    <header class="border-b border-gray-800 bg-gray-900/90 backdrop-blur sticky top-0 z-50" x-data="{ mobileMenuOpen: false }">
+    <header class="border-b border-gray-800 bg-gray-900/90 backdrop-blur sticky top-0 z-50"
+        x-data="{ mobileMenuOpen: false }"
+        x-on:livewire:navigated.window="mobileMenuOpen = false"
+    >
         <div class="container mx-auto px-4 h-20 flex items-center justify-between">
             <a href="{{ route('home') }}" class="text-2xl font-semibold tracking-widest uppercase text-white hover:text-amber-500 transition z-50 relative">
                 Martin Beck
             </a>
 
             <nav class="hidden md:flex space-x-8 text-sm uppercase tracking-wider font-medium">
-                <a href="{{ route('home') }}" class="{{ request()->routeIs('home') ? 'text-amber-500' : 'text-gray-400 hover:text-white' }} transition">Domů</a>
-                <a href="{{ route('projects.index') }}" class="{{ request()->routeIs('projects.*') ? 'text-amber-500' : 'text-gray-400 hover:text-white' }} transition">Projekty</a>
-                <a href="{{ route('people.index') }}" class="{{ request()->routeIs('people.*') ? 'text-amber-500' : 'text-gray-400 hover:text-white' }} transition">Osobnosti</a>
-                <a href="{{ route('about') }}" class="{{ request()->routeIs('about') ? 'text-amber-500' : 'text-gray-400 hover:text-white' }} transition">O mně</a>
-                <a href="{{ route('contact') }}" class="{{ request()->routeIs('contact') ? 'text-amber-500' : 'text-gray-400 hover:text-white' }} transition">Kontakt</a>
-                <a href="{{ route('booking') }}" class="text-black bg-amber-500 px-3 py-1 rounded hover:bg-white transition">
+                <a href="{{ route('home') }}" wire:navigate class="{{ request()->routeIs('home') ? 'text-amber-500' : 'text-gray-400 hover:text-white' }} transition">Domů</a>
+                <a href="{{ route('projects.index') }}" wire:navigate class="{{ request()->routeIs('projects.*') ? 'text-amber-500' : 'text-gray-400 hover:text-white' }} transition">Projekty</a>
+                <a href="{{ route('people.index') }}" wire:navigate class="{{ request()->routeIs('people.*') ? 'text-amber-500' : 'text-gray-400 hover:text-white' }} transition">Osobnosti</a>
+                <a href="{{ route('about') }}" wire:navigate class="{{ request()->routeIs('about') ? 'text-amber-500' : 'text-gray-400 hover:text-white' }} transition">O mně</a>
+                <a href="{{ route('contact') }}" wire:navigate class="{{ request()->routeIs('contact') ? 'text-amber-500' : 'text-gray-400 hover:text-white' }} transition">Kontakt</a>
+                <a href="{{ route('booking') }}" wire:navigate class="text-black bg-amber-500 px-3 py-1 rounded hover:bg-white transition">
                     Rezervovat
                 </a>
             </nav>
@@ -54,13 +57,13 @@
             x-transition:leave-end="opacity-0 -translate-y-10"
             class="absolute top-0 left-0 w-full h-screen bg-gray-900 z-40 flex flex-col items-center justify-center md:hidden space-y-8 text-xl uppercase tracking-widest font-semibold"
         >
-            <a href="{{ route('home') }}" @click="mobileMenuOpen = false" class="{{ request()->routeIs('home') ? 'text-amber-500' : 'text-white' }}">Domů</a>
-            <a href="{{ route('projects.index') }}" @click="mobileMenuOpen = false" class="{{ request()->routeIs('projects.*') ? 'text-amber-500' : 'text-white' }}">Projekty</a>
-            <a href="{{ route('people.index') }}" @click="mobileMenuOpen = false" class="{{ request()->routeIs('people.*') ? 'text-amber-500' : 'text-white' }}">Osobnosti</a>
-            <a href="{{ route('about') }}" @click="mobileMenuOpen = false" class="{{ request()->routeIs('about') ? 'text-amber-500' : 'text-white' }}">O mně</a>
-            <a href="{{ route('contact') }}" @click="mobileMenuOpen = false" class="{{ request()->routeIs('contact') ? 'text-amber-500' : 'text-white' }}">Kontakt</a>
+            <a href="{{ route('home') }}" wire:navigate @click="mobileMenuOpen = false" class="{{ request()->routeIs('home') ? 'text-amber-500' : 'text-white' }}">Domů</a>
+            <a href="{{ route('projects.index') }}" wire:navigate @click="mobileMenuOpen = false" class="{{ request()->routeIs('projects.*') ? 'text-amber-500' : 'text-white' }}">Projekty</a>
+            <a href="{{ route('people.index') }}" wire:navigate @click="mobileMenuOpen = false" class="{{ request()->routeIs('people.*') ? 'text-amber-500' : 'text-white' }}">Osobnosti</a>
+            <a href="{{ route('about') }}" wire:navigate @click="mobileMenuOpen = false" class="{{ request()->routeIs('about') ? 'text-amber-500' : 'text-white' }}">O mně</a>
+            <a href="{{ route('contact') }}" wire:navigate @click="mobileMenuOpen = false" class="{{ request()->routeIs('contact') ? 'text-amber-500' : 'text-white' }}">Kontakt</a>
             
-            <a href="{{ route('booking') }}" @click="mobileMenuOpen = false" class="text-black bg-amber-500 px-8 py-3 rounded mt-4">
+            <a href="{{ route('booking') }}" wire:navigate @click="mobileMenuOpen = false" class="text-black bg-amber-500 px-8 py-3 rounded mt-4">
                 Rezervovat focení
             </a>
         </div>
