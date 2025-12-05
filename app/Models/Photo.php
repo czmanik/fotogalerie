@@ -86,7 +86,7 @@ class Photo extends Model implements HasMedia
 
         $this->addMediaConversion('medium')
               ->width(1200)
-              ->responsive()
+              ->withResponsiveImages()
               ->nonQueued();
 
         $this->addMediaConversion('large')

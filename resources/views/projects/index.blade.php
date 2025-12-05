@@ -13,7 +13,7 @@
                 <a href="{{ route('projects.show', $project->slug) }}" class="group block bg-gray-900 border border-gray-800 hover:border-amber-500/50 transition duration-300">
                     <div class="aspect-3-2 overflow-hidden relative">
                         @if($project->coverPhoto)
-                            <img src="{{ $project->coverPhoto->getFirstMediaUrl('default', 'medium') }}" 
+                            <img src="{{ $project->coverPhoto->getFirstMediaUrl('default', 'thumb') }}"
                                  alt="{{ $project->title }}" 
                                  class="w-full h-full object-cover transform group-hover:scale-105 transition duration-700 ease-in-out">
                         @else
