@@ -4,31 +4,19 @@ namespace App\Models;
 
 use App\Enums\PhotoSlotLocation;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\HasOne;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 
-class PhotoSlot extends Model
+class PhotoSlotTemplate extends Model
 {
-    use HasFactory;
-
     protected $fillable = [
-        'start_at',
-        'status',
         'title',
         'description',
         'price',
         'duration_minutes',
         'location',
     ];
-    
+
     protected $casts = [
-        'start_at' => 'datetime',
         'price' => 'decimal:2',
         'location' => PhotoSlotLocation::class,
     ];
-
-    public function message()
-    {
-        return $this->hasOne(Message::class);
-    }
 }

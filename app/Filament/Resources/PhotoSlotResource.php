@@ -2,13 +2,17 @@
 
 namespace App\Filament\Resources;
 
+use App\Enums\PhotoSlotLocation;
 use App\Filament\Resources\PhotoSlotResource\Pages;
 use App\Models\PhotoSlot;
+use App\Models\PhotoSlotTemplate;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
+use Filament\Forms\Get;
+use Filament\Forms\Set;
 
 class PhotoSlotResource extends Resource
 {
@@ -38,8 +42,30 @@ class PhotoSlotResource extends Resource
                             ->default('free'),
                     ])->columns(2),
 
-                Forms\Components\Section::make('Detaily (Volitelné)')
+                Forms\Components\Section::make('Detaily')
+                    ->description('Vyberte šablonu pro rychlé vyplnění nebo zadejte údaje ručně.')
                     ->schema([
+                        Forms\Components\Select::make('template_id')
+                            ->label('Načíst ze šablony')
+                            ->options(PhotoSlotTemplate::all()->pluck('title', 'id'))
+                            ->searchable()
+                            ->preload()
+                            ->live()
+                            ->afterStateUpdated(function (Set $set, ?string $state) {
+                                if (!$state) return;
+
+                                $template = PhotoSlotTemplate::find($state);
+                                if ($template) {
+                                    $set('title', $template->title);
+                                    $set('price', $template->price);
+                                    $set('description', $template->description);
+                                    $set('duration_minutes', $template->duration_minutes);
+                                    $set('location', $template->location);
+                                }
+                            })
+                            ->columnSpanFull()
+                            ->helperText('Vybráním šablony se předvyplní níže uvedená pole. Údaje můžete poté upravit.'),
+
                         Forms\Components\TextInput::make('title')
                             ->label('Název akce')
                             ->placeholder('např. Vánoční minifocení')
@@ -49,6 +75,15 @@ class PhotoSlotResource extends Resource
                             ->label('Cena (Kč)')
                             ->numeric()
                             ->prefix('Kč'),
+
+                        Forms\Components\TextInput::make('duration_minutes')
+                            ->label('Délka focení (minut)')
+                            ->numeric()
+                            ->suffix('min'),
+
+                        Forms\Components\Select::make('location')
+                            ->label('Místo focení')
+                            ->options(PhotoSlotLocation::class),
 
                         Forms\Components\Textarea::make('description')
                             ->label('Popis / Poznámka pro klienta')
@@ -72,6 +107,17 @@ class PhotoSlotResource extends Resource
                     ->money('CZK')
                     ->label('Cena')
                     ->sortable(),
+
+                Tables\Columns\TextColumn::make('duration_minutes')
+                    ->label('Délka')
+                    ->suffix(' min')
+                    ->sortable()
+                    ->toggleable(isToggledHiddenByDefault: true),
+
+                Tables\Columns\TextColumn::make('location')
+                    ->label('Místo')
+                    ->badge()
+                    ->toggleable(isToggledHiddenByDefault: true),
 
                 Tables\Columns\TextColumn::make('status')
                     ->badge()
