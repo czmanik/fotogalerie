@@ -15,7 +15,7 @@
       gtag('config', 'G-K53Q3P806G');
     </script>
 
-    <script src="https://cdn.tailwindcss.com"></script>
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
     
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
     
@@ -29,7 +29,7 @@
 
     <header class="border-b border-gray-800 bg-gray-900/90 backdrop-blur sticky top-0 z-50"
         x-data="{ mobileMenuOpen: false }"
-        @livewire:navigated.window="mobileMenuOpen = false"
+        x-on:livewire:navigated.window="mobileMenuOpen = false"
     >
         <div class="container mx-auto px-4 h-20 flex items-center justify-between">
             <a href="{{ route('home') }}" class="text-2xl font-semibold tracking-widest uppercase text-white hover:text-amber-500 transition z-50 relative">
