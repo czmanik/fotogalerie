@@ -4,6 +4,8 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Support\Str;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Exhibition extends Model
 {
@@ -11,6 +13,7 @@ class Exhibition extends Model
 
     protected $fillable = [
         'title',
+        'slug',
         'location',
         'description',
         'start_date',
@@ -24,4 +27,20 @@ class Exhibition extends Model
         'end_date' => 'date',
         'is_visible' => 'boolean',
     ];
+
+    protected static function booted(): void
+    {
+        static::saving(function ($exhibition) {
+            if (empty($exhibition->slug)) {
+                $exhibition->slug = Str::slug($exhibition->title);
+            }
+        });
+    }
+
+    public function photos(): BelongsToMany
+    {
+        return $this->belongsToMany(Photo::class, 'exhibition_photo')
+                    ->withPivot('sort_order')
+                    ->orderByPivot('sort_order');
+    }
 }

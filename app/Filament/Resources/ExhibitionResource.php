@@ -26,7 +26,13 @@ class ExhibitionResource extends Resource
                     ->schema([
                         Forms\Components\TextInput::make('title')
                             ->label('Název výstavy')
-                            ->required(),
+                            ->required()
+                            ->live(onBlur: true)
+                            ->afterStateUpdated(fn (string $operation, $state, Forms\Set $set) => $operation === 'create' ? $set('slug', \Illuminate\Support\Str::slug($state)) : null),
+
+                        Forms\Components\TextInput::make('slug')
+                            ->required()
+                            ->unique(ignoreRecord: true),
                         
                         Forms\Components\TextInput::make('location')
                             ->label('Místo konání')
@@ -109,5 +115,9 @@ class ExhibitionResource extends Resource
         ];
     }
     
-    public static function getRelations(): array { return []; }
+    public static function getRelations(): array {
+        return [
+            ExhibitionResource\RelationManagers\PhotosRelationManager::class,
+        ];
+    }
 }

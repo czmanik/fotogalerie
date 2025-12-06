@@ -143,6 +143,44 @@ class HomeController extends Controller
     }
 
     /**
+     * Seznam výstav (Plánované a Proběhlé)
+     */
+    public function exhibitions(): View
+    {
+        $futureExhibitions = Exhibition::where('is_visible', true)
+            ->where(function($query) {
+                $query->whereDate('end_date', '>=', now())
+                      ->orWhereNull('end_date');
+            })
+            ->orderBy('start_date', 'asc')
+            ->get();
+
+        $pastExhibitions = Exhibition::where('is_visible', true)
+            ->whereDate('end_date', '<', now())
+            ->orderBy('end_date', 'desc')
+            ->get();
+
+        return view('exhibitions.index', compact('futureExhibitions', 'pastExhibitions'));
+    }
+
+    /**
+     * Detail výstavy
+     */
+    public function exhibitionShow(string $slug): View
+    {
+        $exhibition = Exhibition::where('slug', $slug)
+            ->where('is_visible', true)
+            ->firstOrFail();
+
+        $exhibition->load(['photos' => function($query) {
+            $query->where('is_visible', true)
+                  ->orderByPivot('sort_order');
+        }]);
+
+        return view('exhibitions.show', compact('exhibition'));
+    }
+
+    /**
      * O mně + Články + Výstavy
      */
     public function about(): View
