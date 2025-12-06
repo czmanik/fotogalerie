@@ -31,7 +31,6 @@ class ExhibitionResource extends Resource
                             ->afterStateUpdated(fn (string $operation, $state, Forms\Set $set) => $operation === 'create' ? $set('slug', \Illuminate\Support\Str::slug($state)) : null),
 
                         Forms\Components\TextInput::make('slug')
-                            ->required()
                             ->unique(ignoreRecord: true),
                         
                         Forms\Components\TextInput::make('location')
@@ -63,6 +62,13 @@ class ExhibitionResource extends Resource
                         Forms\Components\Toggle::make('is_visible')
                             ->label('Zobrazit na webu')
                             ->default(true),
+
+                        Forms\Components\Select::make('cover_photo_id')
+                            ->label('Hlavní fotka (Cover)')
+                            ->relationship('coverPhoto', 'title')
+                            ->searchable()
+                            ->preload()
+                            ->columnSpanFull(),
                     ])->columns(2),
             ]);
     }
