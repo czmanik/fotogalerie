@@ -36,6 +36,11 @@ class HeroCarousel extends Component
             });
     }
 
+    public function shouldRender(): bool
+    {
+        return $this->slides->isNotEmpty();
+    }
+
     public function render()
     {
         return view('components.hero-carousel');
