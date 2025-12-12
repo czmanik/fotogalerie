@@ -108,6 +108,38 @@ class HeroSlideResource extends Resource
                                             ->numeric()
                                             ->default(0),
                                     ]),
+
+                                Section::make('Vzhled')
+                                    ->schema([
+                                        Select::make('layout')
+                                            ->label('Rozložení')
+                                            ->options([
+                                                'overlay' => 'Přes celou fotku (Overlay)',
+                                                'split_left' => 'Fotka vlevo / Text vpravo',
+                                                'split_right' => 'Fotka vpravo / Text vlevo',
+                                            ])
+                                            ->default('overlay')
+                                            ->required(),
+
+                                        Select::make('content_style')
+                                            ->label('Styl obsahu')
+                                            ->options([
+                                                'standard' => 'Standardní (bez pozadí)',
+                                                'boxed' => 'V boxu (karta)',
+                                            ])
+                                            ->default('standard')
+                                            ->required(),
+
+                                        Select::make('text_alignment')
+                                            ->label('Zarovnání textu')
+                                            ->options([
+                                                'left' => 'Vlevo',
+                                                'center' => 'Na střed',
+                                                'right' => 'Vpravo',
+                                            ])
+                                            ->default('center')
+                                            ->required(),
+                                    ]),
                             ]),
                     ]),
             ]);
@@ -128,10 +160,21 @@ class HeroSlideResource extends Resource
                     ->limit(30)
                     ->searchable(),
 
-                TextColumn::make('description')
-                    ->label('Popis')
-                    ->limit(50)
-                    ->toggleable(),
+                TextColumn::make('layout')
+                    ->label('Rozložení')
+                    ->badge()
+                    ->formatStateUsing(fn (string $state): string => match ($state) {
+                        'overlay' => 'Overlay',
+                        'split_left' => 'Vlevo',
+                        'split_right' => 'Vpravo',
+                        default => $state,
+                    })
+                    ->color(fn (string $state): string => match ($state) {
+                        'overlay' => 'gray',
+                        'split_left' => 'info',
+                        'split_right' => 'info',
+                        default => 'gray',
+                    }),
 
                 TextColumn::make('display_duration')
                     ->label('Doba')
