@@ -1,24 +1,6 @@
 <x-layout>
     
-    <section class="relative h-[80vh] flex items-center justify-center overflow-hidden">
-        <div class="absolute inset-0 bg-gray-900">
-             <img src="https://images.unsplash.com/photo-1554048612-387768052bf7?q=80&w=2000&auto=format&fit=crop" class="w-full h-full object-cover opacity-30 grayscale" alt="Hero background">
-             <div class="absolute inset-0 bg-gradient-to-b from-transparent via-gray-900/50 to-gray-900"></div>
-        </div>
-        
-        <div class="relative z-10 text-center px-4 animate-fade-in-up">
-            <h1 class="text-5xl md:text-8xl font-bold text-white mb-6 tracking-tighter uppercase">
-                Martin Beck
-            </h1>
-            <p class="text-lg md:text-2xl text-amber-500 font-light tracking-[0.2em] mb-10 uppercase">
-                Fotografie s duší
-            </p>
-            <a href="{{ route('projects.index') }}" class="group inline-flex items-center gap-3 px-8 py-4 border border-gray-600 text-gray-300 hover:border-white hover:text-white transition duration-500 uppercase tracking-widest text-xs">
-                Vstoupit do portfolia
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4 group-hover:translate-x-1 transition"><path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3" /></svg>
-            </a>
-        </div>
-    </section>
+    <x-hero-carousel />
 
     @if($birthday_people->isNotEmpty())
         <section class="bg-gradient-to-r from-amber-900/20 to-gray-900 border-y border-amber-900/30 py-8">
