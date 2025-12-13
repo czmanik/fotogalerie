@@ -15,7 +15,7 @@ use Filament\Forms\Components\Toggle;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
-use Filament\Tables\Columns\ImageColumn;
+use Filament\Tables\Columns\SpatieMediaLibraryImageColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Columns\ToggleColumn;
 use Filament\Tables\Table;
@@ -149,7 +149,7 @@ class HeroSlideResource extends Resource
     {
         return $table
             ->columns([
-                ImageColumn::make('hero')
+                SpatieMediaLibraryImageColumn::make('hero')
                     ->label('Foto')
                     ->collection('hero')
                     ->defaultImageUrl(fn ($record) => $record->photo ? $record->photo->getFirstMediaUrl('default', 'thumb') : null)
