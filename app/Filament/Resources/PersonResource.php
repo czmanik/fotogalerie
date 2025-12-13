@@ -46,7 +46,7 @@ class PersonResource extends Resource
                     ->schema([
                         Forms\Components\DatePicker::make('birth_date')->label('Datum narození'),
                         Forms\Components\DatePicker::make('death_date')->label('Datum úmrtí'),
-                        Forms\Components\Textarea::make('bio')
+                        Forms\Components\RichEditor::make('bio')
                             ->label('Biografie')
                             ->columnSpanFull(),
                     ])->columns(2),

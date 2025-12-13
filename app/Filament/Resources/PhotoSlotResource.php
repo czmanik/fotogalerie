@@ -85,9 +85,8 @@ class PhotoSlotResource extends Resource
                             ->label('Místo focení')
                             ->options(PhotoSlotLocation::class),
 
-                        Forms\Components\Textarea::make('description')
+                        Forms\Components\RichEditor::make('description')
                             ->label('Popis / Poznámka pro klienta')
-                            ->rows(2)
                             ->columnSpanFull(),
                     ])->columns(2),
             ]);

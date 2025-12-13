@@ -41,7 +41,7 @@
 
                 @if($person->bio)
                     <div class="prose prose-invert prose-lg text-gray-400 max-w-none">
-                        <p>{{ $person->bio }}</p>
+                    {!! $person->bio !!}
                     </div>
                 @endif
             </div>

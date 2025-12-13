@@ -10,7 +10,7 @@ use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
 use Filament\Forms\Components\TextInput;
-use Filament\Forms\Components\Textarea;
+use Filament\Forms\Components\RichEditor;
 use Filament\Forms\Components\Toggle;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\SpatieMediaLibraryFileUpload;
@@ -49,9 +49,8 @@ class PhotoResource extends Resource
                     ->unique(ignoreRecord: true)
                     ->helperText('Nechte prázdné pro automatické vygenerování.'),
 
-                Textarea::make('description')
+                RichEditor::make('description')
                     ->label('Popis')
-                    ->rows(3)
                     ->columnSpanFull(),
 
                 // --- Sekce NASTAVENÍ ---

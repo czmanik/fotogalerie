@@ -37,7 +37,7 @@ class ProjectResource extends Resource
                                     ->required()
                                     ->unique(ignoreRecord: true),
 
-                                Forms\Components\Textarea::make('description')
+                                Forms\Components\RichEditor::make('description')
                                     ->columnSpanFull(),
 
                                 Forms\Components\Placeholder::make('people_list')

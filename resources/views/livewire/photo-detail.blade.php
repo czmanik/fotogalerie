@@ -1,7 +1,7 @@
 <div class="h-full bg-black flex flex-col items-center justify-center p-4">
 
     {{-- Photo Container --}}
-    <div class="w-full max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-4 gap-8 h-full">
+    <div class="w-full max-w-[95%] mx-auto grid grid-cols-1 lg:grid-cols-4 gap-8 h-full">
 
         {{-- Image Section (Takes up most space) --}}
         <div class="lg:col-span-3 flex flex-col items-center justify-center relative bg-gray-900/50 rounded-lg overflow-hidden" style="min-height: 70vh;">
@@ -41,7 +41,7 @@
                 <div class="space-y-4 text-sm">
                     @if($photo->description)
                         <div class="prose prose-invert text-gray-400 leading-relaxed">
-                            {{ $photo->description }}
+                            {!! $photo->description !!}
                         </div>
                     @endif
 

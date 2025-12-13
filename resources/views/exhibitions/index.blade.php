@@ -3,7 +3,7 @@
         Výstavy
     </x-slot>
 
-    <div class="py-12 bg-black text-white min-h-screen">
+    <div class="py-12 bg-gray-900 text-white min-h-screen">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <h1 class="text-4xl font-bold tracking-tight text-white mb-12 uppercase">Výstavy</h1>
 

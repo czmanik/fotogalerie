@@ -38,9 +38,8 @@ class ExhibitionResource extends Resource
                             ->required()
                             ->placeholder('např. Galerie Mánes, Praha'),
                             
-                        Forms\Components\Textarea::make('description')
+                        Forms\Components\RichEditor::make('description')
                             ->label('Popis')
-                            ->rows(3)
                             ->columnSpanFull(),
                     ])->columns(2),
 

@@ -3,7 +3,7 @@
         {{ $exhibition->title }}
     </x-slot>
 
-    <div class="py-12 bg-black text-white min-h-screen">
+    <div class="py-12 bg-gray-900 text-white min-h-screen">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
             {{-- Header --}}
@@ -43,7 +43,7 @@
 
                 @if($exhibition->description)
                     <div class="mt-8 prose prose-invert max-w-3xl text-gray-300">
-                        <p>{{ $exhibition->description }}</p>
+                        {!! $exhibition->description !!}
                     </div>
                 @endif
             </div>
