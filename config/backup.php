@@ -144,12 +144,12 @@ return [
     'notifications' => [
 
         'notifications' => [
-            \Spatie\Backup\Notifications\Notifications\BackupHasFailed::class => ['log'],
-            \Spatie\Backup\Notifications\Notifications\UnhealthyBackupWasFound::class => ['log'],
-            \Spatie\Backup\Notifications\Notifications\CleanupHasFailed::class => ['log'],
-            \Spatie\Backup\Notifications\Notifications\BackupWasSuccessful::class => ['log'],
-            \Spatie\Backup\Notifications\Notifications\HealthyBackupWasFound::class => ['log'],
-            \Spatie\Backup\Notifications\Notifications\CleanupWasSuccessful::class => ['log'],
+            \Spatie\Backup\Notifications\Notifications\BackupHasFailed::class => [],
+            \Spatie\Backup\Notifications\Notifications\UnhealthyBackupWasFound::class => [],
+            \Spatie\Backup\Notifications\Notifications\CleanupHasFailed::class => [],
+            \Spatie\Backup\Notifications\Notifications\BackupWasSuccessful::class => [],
+            \Spatie\Backup\Notifications\Notifications\HealthyBackupWasFound::class => [],
+            \Spatie\Backup\Notifications\Notifications\CleanupWasSuccessful::class => [],
         ],
 
         /*

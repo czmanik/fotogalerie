@@ -7,6 +7,8 @@ use Filament\Actions\Action;
 use Illuminate\Support\Facades\Artisan;
 use Filament\Notifications\Notification;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Collection;
 
 class BackupPage extends Page
 {
@@ -28,14 +30,10 @@ class BackupPage extends Page
 
     public function createBackup(): void
     {
-        // Zvýšíme limity pro běh skriptu, protože záloha může trvat déle
         set_time_limit(0);
         ini_set('memory_limit', '512M');
 
         try {
-            // Změna dle zadání: "zálohavat do podoby seederů a zároveň bude archivovat obsah v podobě fotografií"
-            // Takže musíme full backup.
-
             Artisan::call('backup:run');
 
             Notification::make()
@@ -52,27 +50,74 @@ class BackupPage extends Page
         }
     }
 
-    public function downloadLatestBackup(): ?BinaryFileResponse
+    /**
+     * @return Collection<int, array<string, mixed>>
+     */
+    public function getBackups(): Collection
     {
-        $backupDisk = \Illuminate\Support\Facades\Storage::disk('local');
+        $backupDisk = Storage::disk('local');
         $appName = config('backup.backup.name');
         $directory = $appName;
 
         $files = $backupDisk->files($directory);
 
-        if (empty($files)) {
-             Notification::make()
-                ->title('Žádná záloha k dispozici')
-                ->warning()
-                ->send();
-            return null;
+        $backups = collect();
+
+        foreach ($files as $file) {
+            if (pathinfo($file, PATHINFO_EXTENSION) === 'zip') {
+                $backups->push([
+                    'path' => $file,
+                    'filename' => basename($file),
+                    'size' => $this->formatSize($backupDisk->size($file)),
+                    'date' => $backupDisk->lastModified($file),
+                    'timestamp' => $backupDisk->lastModified($file),
+                ]);
+            }
         }
 
-        $latestBackup = collect($files)->sortByDesc(function ($file) use ($backupDisk) {
-            return $backupDisk->lastModified($file);
-        })->first();
+        return $backups->sortByDesc('timestamp');
+    }
 
-        return response()->download($backupDisk->path($latestBackup));
+    protected function formatSize(int $bytes): string
+    {
+        $units = ['B', 'KB', 'MB', 'GB', 'TB'];
+        $power = $bytes > 0 ? floor(log($bytes, 1024)) : 0;
+        return number_format($bytes / pow(1024, $power), 2, '.', ',') . ' ' . $units[$power];
+    }
+
+    public function downloadBackup(string $path): BinaryFileResponse
+    {
+        $backupDisk = Storage::disk('local');
+
+        if (!$backupDisk->exists($path)) {
+            Notification::make()
+                ->title('Soubor neexistuje')
+                ->danger()
+                ->send();
+            abort(404);
+        }
+
+        return response()->download($backupDisk->path($path));
+    }
+
+    public function deleteBackup(string $path): void
+    {
+        $backupDisk = Storage::disk('local');
+
+        if ($backupDisk->exists($path)) {
+            $backupDisk->delete($path);
+            Notification::make()
+                ->title('Záloha byla smazána')
+                ->success()
+                ->send();
+        }
+    }
+
+    protected function getViewData(): array
+    {
+        return [
+            'backups' => $this->getBackups(),
+        ];
     }
 
     protected function getHeaderActions(): array
@@ -82,11 +127,6 @@ class BackupPage extends Page
                 ->label('Vytvořit novou zálohu')
                 ->action('createBackup')
                 ->color('primary'),
-
-            Action::make('download_backup')
-                ->label('Stáhnout poslední zálohu')
-                ->action('downloadLatestBackup')
-                ->color('gray'),
         ];
     }
 }

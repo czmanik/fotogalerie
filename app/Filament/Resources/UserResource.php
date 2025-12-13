@@ -60,7 +60,8 @@ class UserResource extends Resource
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
                 Tables\Columns\TextColumn::make('last_login_at')
-                    ->dateTime()
+                    ->label('Naposledy viděn')
+                    ->dateTime('d.m.Y H:i')
                     ->sortable(),
             ])
             ->filters([
