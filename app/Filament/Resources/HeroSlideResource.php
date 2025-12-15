@@ -9,6 +9,7 @@ use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\Grid;
 use Filament\Forms\Components\Section;
 use Filament\Forms\Components\Select;
+use Filament\Forms\Components\SpatieMediaLibraryFileUpload;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
@@ -70,7 +71,7 @@ class HeroSlideResource extends Resource
                                 Section::make('Fotografie')
                                     ->description('Nahrajte novou fotografii nebo vyberte z existujících.')
                                     ->schema([
-                                        FileUpload::make('hero')
+                                        SpatieMediaLibraryFileUpload::make('hero')
                                             ->label('Nahrát fotografii (Hero)')
                                             ->collection('hero')
                                             ->image()
