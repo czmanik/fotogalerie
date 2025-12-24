@@ -39,6 +39,7 @@
             <nav class="hidden md:flex space-x-8 text-sm uppercase tracking-wider font-medium">
                 <a href="{{ route('home') }}" wire:navigate class="{{ request()->routeIs('home') ? 'text-amber-500' : 'text-gray-400 hover:text-white' }} transition">Domů</a>
                 <a href="{{ route('projects.index') }}" wire:navigate class="{{ request()->routeIs('projects.*') ? 'text-amber-500' : 'text-gray-400 hover:text-white' }} transition">Projekty</a>
+                <a href="{{ route('exhibitions.index') }}" wire:navigate class="{{ request()->routeIs('exhibitions.*') ? 'text-amber-500' : 'text-gray-400 hover:text-white' }} transition">Výstavy</a>
                 <a href="{{ route('people.index') }}" wire:navigate class="{{ request()->routeIs('people.*') ? 'text-amber-500' : 'text-gray-400 hover:text-white' }} transition">Osobnosti</a>
                 <a href="{{ route('about') }}" wire:navigate class="{{ request()->routeIs('about') ? 'text-amber-500' : 'text-gray-400 hover:text-white' }} transition">O mně</a>
                 <a href="{{ route('contact') }}" wire:navigate class="{{ request()->routeIs('contact') ? 'text-amber-500' : 'text-gray-400 hover:text-white' }} transition">Kontakt</a>
@@ -70,6 +71,7 @@
         >
             <a href="{{ route('home') }}" wire:navigate @click="mobileMenuOpen = false" class="{{ request()->routeIs('home') ? 'text-amber-500' : 'text-white' }}">Domů</a>
             <a href="{{ route('projects.index') }}" wire:navigate @click="mobileMenuOpen = false" class="{{ request()->routeIs('projects.*') ? 'text-amber-500' : 'text-white' }}">Projekty</a>
+            <a href="{{ route('exhibitions.index') }}" wire:navigate @click="mobileMenuOpen = false" class="{{ request()->routeIs('exhibitions.*') ? 'text-amber-500' : 'text-white' }}">Výstavy</a>
             <a href="{{ route('people.index') }}" wire:navigate @click="mobileMenuOpen = false" class="{{ request()->routeIs('people.*') ? 'text-amber-500' : 'text-white' }}">Osobnosti</a>
             <a href="{{ route('about') }}" wire:navigate @click="mobileMenuOpen = false" class="{{ request()->routeIs('about') ? 'text-amber-500' : 'text-white' }}">O mně</a>
             <a href="{{ route('contact') }}" wire:navigate @click="mobileMenuOpen = false" class="{{ request()->routeIs('contact') ? 'text-amber-500' : 'text-white' }}">Kontakt</a>

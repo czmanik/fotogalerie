@@ -76,6 +76,11 @@ class Photo extends Model implements HasMedia
         return $this->belongsToMany(Project::class, 'project_photo');
     }
 
+    public function exhibitions(): BelongsToMany
+    {
+        return $this->belongsToMany(Exhibition::class, 'exhibition_photo');
+    }
+
     public function registerMediaConversions(Media $media = null): void
     {
         $this->addMediaConversion('thumb')

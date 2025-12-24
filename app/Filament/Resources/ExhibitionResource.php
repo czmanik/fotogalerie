@@ -26,16 +26,20 @@ class ExhibitionResource extends Resource
                     ->schema([
                         Forms\Components\TextInput::make('title')
                             ->label('Název výstavy')
-                            ->required(),
+                            ->required()
+                            ->live(onBlur: true)
+                            ->afterStateUpdated(fn (string $operation, $state, Forms\Set $set) => $operation === 'create' ? $set('slug', \Illuminate\Support\Str::slug($state)) : null),
+
+                        Forms\Components\TextInput::make('slug')
+                            ->unique(ignoreRecord: true),
                         
                         Forms\Components\TextInput::make('location')
                             ->label('Místo konání')
                             ->required()
                             ->placeholder('např. Galerie Mánes, Praha'),
                             
-                        Forms\Components\Textarea::make('description')
+                        Forms\Components\RichEditor::make('description')
                             ->label('Popis')
-                            ->rows(3)
                             ->columnSpanFull(),
                     ])->columns(2),
 
@@ -57,6 +61,13 @@ class ExhibitionResource extends Resource
                         Forms\Components\Toggle::make('is_visible')
                             ->label('Zobrazit na webu')
                             ->default(true),
+
+                        Forms\Components\Select::make('cover_photo_id')
+                            ->label('Hlavní fotka (Cover)')
+                            ->relationship('coverPhoto', 'title')
+                            ->searchable()
+                            ->preload()
+                            ->columnSpanFull(),
                     ])->columns(2),
             ]);
     }
@@ -109,5 +120,9 @@ class ExhibitionResource extends Resource
         ];
     }
     
-    public static function getRelations(): array { return []; }
+    public static function getRelations(): array {
+        return [
+            ExhibitionResource\RelationManagers\PhotosRelationManager::class,
+        ];
+    }
 }

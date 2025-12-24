@@ -9,8 +9,8 @@
             <h1 class="text-4xl md:text-6xl font-bold text-white mb-6">{{ $project->title }}</h1>
             
             @if($project->description)
-                <div class="max-w-3xl mx-auto text-gray-400 text-lg leading-relaxed">
-                    {{ $project->description }}
+                <div class="max-w-3xl mx-auto text-gray-400 text-lg leading-relaxed prose prose-invert">
+                    {!! $project->description !!}
                 </div>
             @endif
             

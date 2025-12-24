@@ -5,6 +5,7 @@ namespace App\Livewire;
 use App\Models\Photo;
 use App\Models\Project;
 use App\Models\Person;
+use App\Models\Exhibition;
 use Livewire\Component;
 use Livewire\Attributes\Url;
 use Illuminate\Support\Facades\Session;
@@ -20,6 +21,9 @@ class PhotoDetail extends Component
 
     #[Url]
     public $personId;
+
+    #[Url]
+    public $exhibitionId;
 
     public function mount($slug)
     {
@@ -66,6 +70,10 @@ class PhotoDetail extends Component
             return $this->getPersonAdjacentPhoto($direction);
         }
 
+        if ($this->exhibitionId) {
+            return $this->getExhibitionAdjacentPhoto($direction);
+        }
+
         return $this->getGlobalAdjacentPhoto($direction);
     }
 
@@ -84,6 +92,28 @@ class PhotoDetail extends Component
 
         // Get all visible photo IDs in this project, ordered by pivot
         $ids = $project->photos()
+            ->where('photos.is_visible', true)
+            ->orderByPivot('sort_order')
+            ->pluck('photos.id')
+            ->toArray();
+
+        return $this->findAdjacentId($ids, $direction);
+    }
+
+    /**
+     * Navigation within an Exhibition context.
+     */
+    private function getExhibitionAdjacentPhoto($direction)
+    {
+        $exhibition = Exhibition::find($this->exhibitionId);
+
+        if (!$exhibition) {
+            $this->exhibitionId = null;
+            return $this->getGlobalAdjacentPhoto($direction);
+        }
+
+        // Get all visible photo IDs for this exhibition, ordered by pivot sort_order
+        $ids = $exhibition->photos()
             ->where('photos.is_visible', true)
             ->orderByPivot('sort_order')
             ->pluck('photos.id')

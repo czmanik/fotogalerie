@@ -27,14 +27,33 @@
             @foreach($upcoming_exhibitions as $exhibition)
             <div class="relative group">
                 <h3 class="text-gray-500 text-xs uppercase tracking-widest mb-4 border-l-2 border-amber-500 pl-3">Nejbližší výstava</h3>
-                <div class="bg-gray-900 border border-gray-800 p-8 hover:border-gray-600 transition duration-300 h-full flex flex-col justify-center">
-                    <div class="text-4xl md:text-5xl font-bold text-white mb-4 group-hover:text-amber-500 transition">
-                        {{ $exhibition->start_date->format('d. m.') }}
+
+                <a href="{{ route('exhibitions.show', $exhibition->slug) }}" class="block relative overflow-hidden bg-gray-900 border border-gray-800 hover:border-gray-600 transition duration-300 h-full">
+
+                    @if($exhibition->coverPhoto)
+                        <div class="absolute inset-0 z-0">
+                            <img src="{{ $exhibition->coverPhoto->getFirstMediaUrl('default', 'medium') }}"
+                                 class="w-full h-full object-cover opacity-30 group-hover:opacity-50 transition duration-700 grayscale group-hover:grayscale-0"
+                                 alt="{{ $exhibition->title }}">
+                             <div class="absolute inset-0 bg-gradient-to-t from-gray-900 via-gray-900/80 to-transparent"></div>
+                        </div>
+                    @endif
+
+                    <div class="relative z-10 p-8 flex flex-col justify-center h-full">
+                        <div class="text-4xl md:text-5xl font-bold text-white mb-4 group-hover:text-amber-500 transition">
+                            {{ $exhibition->start_date->format('d. m.') }}
+                        </div>
+                        <h4 class="text-2xl text-gray-200 mb-2 font-bold">{{ $exhibition->title }}</h4>
+                        <p class="text-gray-400 mb-6 flex items-center gap-2">
+                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4 text-amber-500">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M15 10.5a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1 1 15 0Z" />
+                            </svg>
+                            {{ $exhibition->location }}
+                        </p>
+                        <span class="text-sm text-white border-b border-gray-700 pb-1 self-start group-hover:border-amber-500 transition">Více informací &rarr;</span>
                     </div>
-                    <h4 class="text-2xl text-gray-200 mb-2">{{ $exhibition->title }}</h4>
-                    <p class="text-gray-500 mb-6">{{ $exhibition->location }}</p>
-                    <a href="{{ route('about') }}" class="text-sm text-white border-b border-gray-700 pb-1 self-start hover:border-amber-500 transition">Více informací</a>
-                </div>
+                </a>
             </div>
             @endforeach
 
