@@ -44,9 +44,10 @@
                     <h3 class="text-white font-bold text-2xl mb-6 font-serif">Dva světy, jeden pohled</h3>
                     <p>
                         Jmenuji se Martin Beck a pohybuji se ve dvou světech, které k sobě mají blíže, než by se mohlo zdát. 
-                        Jako <strong>operní pěvec</strong> a sólista, který prošel Pražskou konzervatoří až na prkna Národního divadla, 
+                        Jako <strong>operní pěvec</strong>, který prošel Pražskou konzervatoří až na prkna Národního divadla,
                         vnímám svět skrze emoce, drama a jevištní světlo.
                     </p>
+                    <p><br/></p>
                     <p>
                         Profesionální fotografii se věnuji od roku 2002 a od roku 2014 mám tu čest propojovat obě své vášně jako 
                         oficiální <strong>umělecký fotograf Národního divadla</strong>. Moje zkušenost z jeviště mi pomáhá 
