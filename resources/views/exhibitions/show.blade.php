@@ -7,6 +7,15 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
             {{-- Header --}}
+            @if($exhibition->coverPhoto)
+                <div class="relative w-full h-[50vh] md:h-[60vh] overflow-hidden mb-12 rounded-lg shadow-2xl">
+                    <img src="{{ $exhibition->coverPhoto->getFirstMediaUrl('default', 'large') }}"
+                         alt="{{ $exhibition->title }}"
+                         class="w-full h-full object-cover">
+                    <div class="absolute inset-0 bg-gradient-to-t from-gray-900 via-transparent to-transparent"></div>
+                </div>
+            @endif
+
             <div class="mb-12 border-b border-gray-800 pb-8">
                 <a href="{{ route('exhibitions.index') }}" class="inline-flex items-center text-amber-500 hover:text-amber-400 mb-6 transition">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4 mr-2">

@@ -35,9 +35,9 @@
                                             @endif
                                         </p>
                                     </div>
-                                    <p class="text-gray-500 text-sm line-clamp-3">
-                                        {{ $exhibition->description }}
-                                    </p>
+                                    <div class="text-gray-500 text-sm line-clamp-3 prose prose-invert prose-sm">
+                                        {!! $exhibition->description !!}
+                                    </div>
                                 </div>
                             </a>
                         @endforeach
@@ -73,9 +73,9 @@
                                             @endif
                                         </p>
                                     </div>
-                                    <p class="text-gray-500 text-sm line-clamp-3">
-                                        {{ $exhibition->description }}
-                                    </p>
+                                    <div class="text-gray-500 text-sm line-clamp-3 prose prose-invert prose-sm">
+                                        {!! $exhibition->description !!}
+                                    </div>
                                 </div>
                             </a>
                         @endforeach
