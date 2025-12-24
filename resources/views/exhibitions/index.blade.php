@@ -36,7 +36,7 @@
                                         </p>
                                     </div>
                                     <div class="text-gray-500 text-sm line-clamp-3 prose prose-invert prose-sm">
-                                        {!! $exhibition->description !!}
+                                        {{ Str::limit(strip_tags($exhibition->description), 200) }}
                                     </div>
                                 </div>
                             </a>
@@ -74,7 +74,7 @@
                                         </p>
                                     </div>
                                     <div class="text-gray-500 text-sm line-clamp-3 prose prose-invert prose-sm">
-                                        {!! $exhibition->description !!}
+                                        {{ Str::limit(strip_tags($exhibition->description), 200) }}
                                     </div>
                                 </div>
                             </a>

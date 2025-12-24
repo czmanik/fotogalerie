@@ -49,10 +49,17 @@ class HeroSlideResource extends Resource
                                             ->placeholder('MARTIN BECK')
                                             ->nullable(),
 
-                                        Textarea::make('description')
+                                        Forms\Components\RichEditor::make('description')
                                             ->label('Popis')
                                             ->placeholder('Fotografie s duší')
-                                            ->rows(3)
+                                            ->toolbarButtons([
+                                                'bold',
+                                                'italic',
+                                                'link',
+                                                'bulletList',
+                                                'redo',
+                                                'undo',
+                                            ])
                                             ->nullable(),
 
                                         Grid::make(2)

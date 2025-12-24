@@ -78,6 +78,25 @@
                         </div>
                     @endif
 
+                    {{-- Exhibitions --}}
+                    @php
+                        $visibleExhibitions = $photo->exhibitions->where('is_visible', true);
+                    @endphp
+                    @if($visibleExhibitions->count() > 0)
+                        <div class="pt-4 border-t border-gray-800">
+                            <h3 class="text-xs uppercase tracking-widest text-amber-500 mb-2">Výstavy</h3>
+                            <ul class="space-y-1">
+                                @foreach($visibleExhibitions as $exhibition)
+                                    <li>
+                                        <a href="{{ route('exhibitions.show', $exhibition->slug) }}" class="hover:text-white hover:underline decoration-amber-500 decoration-1 underline-offset-4 transition">
+                                            {{ $exhibition->title }}
+                                        </a>
+                                    </li>
+                                @endforeach
+                            </ul>
+                        </div>
+                    @endif
+
                     {{-- EXIF / Technical info (Optional, keeping it subtle) --}}
                     @if($photo->captured_at)
                          <div class="pt-4 border-t border-gray-800 text-xs text-gray-600">

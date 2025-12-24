@@ -70,6 +70,35 @@ class PhotosRelationManager extends RelationManager
                     ->label('Viditelné'),
             ])
             ->headerActions([
+                Tables\Actions\Action::make('importFromProjects')
+                    ->label('Načíst z připojených projektů')
+                    ->icon('heroicon-m-arrow-down-tray')
+                    ->requiresConfirmation()
+                    ->modalHeading('Načíst fotografie z projektů')
+                    ->modalDescription('Opravdu chcete načíst všechny fotografie z projektů připojených k této výstavě? Fotografie budou přidány na konec seznamu.')
+                    ->action(function ($livewire) {
+                        $exhibition = $livewire->getOwnerRecord();
+
+                        // Načteme všechny projekty připojené k výstavě a jejich fotky
+                        $projects = $exhibition->projects()->with('photos')->get();
+
+                        $count = 0;
+                        foreach ($projects as $project) {
+                            $photoIds = $project->photos->pluck('id')->toArray();
+
+                            if (!empty($photoIds)) {
+                                $exhibition->photos()->syncWithoutDetaching($photoIds);
+                                $count += count($photoIds);
+                            }
+                        }
+
+                        \Filament\Notifications\Notification::make()
+                            ->title('Fotografie byly načteny')
+                            ->body("Celkem bylo zpracováno (přidáno nebo ověřeno) {$count} fotografií z připojených projektů.")
+                            ->success()
+                            ->send();
+                    }),
+
                 // 1. Tlačítko pro vytvoření NOVÉ fotky rovnou v projektu
                 Tables\Actions\CreateAction::make()
                     ->label('Nahrát novou fotku')

@@ -60,6 +60,23 @@
                 @endif
             </div>
 
+            {{-- Linked Projects --}}
+            @if($exhibition->projects->count() > 0)
+                <div class="mb-16 border-b border-gray-800 pb-8">
+                    <h2 class="text-2xl font-bold text-amber-500 mb-6 uppercase tracking-wider">Související projekty</h2>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        @foreach($exhibition->projects as $project)
+                            <a href="{{ route('projects.show', $project->slug) }}" class="group block bg-gray-800 rounded-lg p-6 hover:bg-gray-700 transition">
+                                <h3 class="text-xl font-bold text-white group-hover:text-amber-500 transition mb-2">{{ $project->title }}</h3>
+                                @if($project->description)
+                                    <p class="text-gray-400 text-sm line-clamp-2">{{ Str::limit(strip_tags($project->description), 150) }}</p>
+                                @endif
+                            </a>
+                        @endforeach
+                    </div>
+                </div>
+            @endif
+
             {{-- Gallery Grid --}}
             @if($exhibition->photos->count() > 0)
                 <h2 class="text-2xl font-bold text-white mb-6 uppercase tracking-wider">Fotogalerie</h2>

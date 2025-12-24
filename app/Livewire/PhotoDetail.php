@@ -35,7 +35,7 @@ class PhotoDetail extends Component
     {
         $this->photo = Photo::where('slug', $this->slug)
             ->where('is_visible', true)
-            ->with(['projects', 'people'])
+            ->with(['projects', 'people', 'exhibitions'])
             ->firstOrFail();
 
         // If the URL changes (e.g. via navigation), we update the slug property

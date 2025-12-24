@@ -116,10 +116,10 @@
                         class="text-5xl md:text-7xl font-bold text-white mb-6 tracking-tighter uppercase leading-tight"
                     ></h1>
 
-                    <p
-                        x-text="slide.description"
-                        class="text-lg md:text-xl text-amber-500 font-light tracking-[0.2em] mb-10 uppercase"
-                    ></p>
+                    <div
+                        x-html="slide.description"
+                        class="text-lg md:text-xl text-amber-500 font-light tracking-[0.2em] mb-10 uppercase prose prose-invert prose-p:text-amber-500 prose-a:text-white"
+                    ></div>
 
                     <a
                         x-show="slide.button_text && slide.button_url"
