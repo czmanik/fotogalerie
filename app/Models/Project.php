@@ -28,4 +28,9 @@ class Project extends Model
                     ->withPivot('sort_order'); // Chceme pracovat s pořadím v pivot tabulce
                     // ->orderByPivot('sort_order'); // Automaticky řadit podle pivotu - ODSTRANĚNO kvůli konfliktu v adminu (ambiguous column)
     }
+
+    public function exhibitions(): BelongsToMany
+    {
+        return $this->belongsToMany(Exhibition::class, 'exhibition_project');
+    }
 }

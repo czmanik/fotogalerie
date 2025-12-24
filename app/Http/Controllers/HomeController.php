@@ -183,6 +183,11 @@ class HomeController extends Controller
                   ->orderByPivot('sort_order');
         }]);
 
+        // Merge cover photo into photos if not already present
+        if ($exhibition->coverPhoto && !$exhibition->photos->contains('id', $exhibition->cover_photo_id)) {
+            $exhibition->photos->prepend($exhibition->coverPhoto);
+        }
+
         return view('exhibitions.show', compact('exhibition'));
     }
 

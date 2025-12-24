@@ -50,4 +50,9 @@ class Exhibition extends Model
     {
         return $this->belongsTo(Photo::class, 'cover_photo_id');
     }
+
+    public function projects(): BelongsToMany
+    {
+        return $this->belongsToMany(Project::class, 'exhibition_project');
+    }
 }

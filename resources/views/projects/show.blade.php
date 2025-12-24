@@ -13,6 +13,22 @@
                     {!! $project->description !!}
                 </div>
             @endif
+
+            @if($project->exhibitions->count() > 0)
+                <div class="mt-8 text-center">
+                    <p class="text-xs text-gray-500 uppercase tracking-widest mb-2">Tento projekt byl vystaven:</p>
+                    <div class="flex flex-wrap justify-center gap-4">
+                        @foreach($project->exhibitions as $exhibition)
+                            <a href="{{ route('exhibitions.show', $exhibition->slug) }}" class="inline-flex items-center gap-2 px-3 py-1 bg-gray-800 hover:bg-amber-900/50 text-gray-300 hover:text-white text-sm rounded transition border border-gray-700 hover:border-amber-500/50">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4 text-amber-500">
+                                  <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 21v-7.5a.75.75 0 0 1 .75-.75h3a.75.75 0 0 1 .75.75V21m-4.5 0H2.36m11.14 0H18m0 0h4.5M12 3v18M12 3a9 9 0 0 1 9 9m-9-9a9 9 0 0 0-9 9m9 9H2.36" />
+                                </svg>
+                                {{ $exhibition->title }}
+                            </a>
+                        @endforeach
+                    </div>
+                </div>
+            @endif
             
             </div>
     </div>

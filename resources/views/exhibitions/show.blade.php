@@ -8,11 +8,14 @@
 
             {{-- Header --}}
             @if($exhibition->coverPhoto)
-                <div class="relative w-full h-[50vh] md:h-[60vh] overflow-hidden mb-12 rounded-lg shadow-2xl">
+                <div class="relative w-full h-[40vh] md:h-[50vh] overflow-hidden mb-12 rounded-lg shadow-2xl bg-gray-900">
                     <img src="{{ $exhibition->coverPhoto->getFirstMediaUrl('default', 'large') }}"
                          alt="{{ $exhibition->title }}"
-                         class="w-full h-full object-cover">
-                    <div class="absolute inset-0 bg-gradient-to-t from-gray-900 via-transparent to-transparent"></div>
+                         class="w-full h-full object-cover opacity-60 grayscale group-hover:grayscale-0 transition duration-1000">
+                    <div class="absolute inset-0 bg-gradient-to-t from-gray-900 via-gray-900/40 to-transparent"></div>
+                    <div class="absolute bottom-0 left-0 p-8">
+                        {{-- Optional overlay text if needed, currently empty to match homepage style --}}
+                    </div>
                 </div>
             @endif
 

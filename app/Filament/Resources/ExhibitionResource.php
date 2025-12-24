@@ -68,6 +68,14 @@ class ExhibitionResource extends Resource
                             ->searchable()
                             ->preload()
                             ->columnSpanFull(),
+
+                        Forms\Components\Select::make('projects')
+                            ->label('Připojené projekty')
+                            ->relationship('projects', 'title')
+                            ->multiple()
+                            ->preload()
+                            ->searchable()
+                            ->columnSpanFull(),
                     ])->columns(2),
             ]);
     }
