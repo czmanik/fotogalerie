@@ -29,6 +29,8 @@ class HomeController extends Controller
                 
             // 2. Výstavy (stále platí)
             'upcoming_exhibitions' => Exhibition::where('is_visible', true)
+                ->whereNotNull('slug')
+                ->where('slug', '!=', '')
                 ->where(function($query) {
                     $query->whereDate('end_date', '>=', now())
                           ->orWhereNull('end_date');
@@ -148,6 +150,8 @@ class HomeController extends Controller
     public function exhibitions(): View
     {
         $futureExhibitions = Exhibition::where('is_visible', true)
+            ->whereNotNull('slug')
+            ->where('slug', '!=', '')
             ->where(function($query) {
                 $query->whereDate('end_date', '>=', now())
                       ->orWhereNull('end_date');
@@ -156,6 +160,8 @@ class HomeController extends Controller
             ->get();
 
         $pastExhibitions = Exhibition::where('is_visible', true)
+            ->whereNotNull('slug')
+            ->where('slug', '!=', '')
             ->whereDate('end_date', '<', now())
             ->orderBy('end_date', 'desc')
             ->get();
