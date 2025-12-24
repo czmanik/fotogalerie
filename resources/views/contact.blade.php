@@ -28,7 +28,7 @@
         </div>
         <div>
             <h3 class="text-white font-bold uppercase tracking-wide text-sm mb-1">Telefon</h3>
-            <a href="tel:+420736426519" class="text-gray-400 hover:text-white transition text-lg block">+420 736 426 519</a>
+            <a href="tel:+420797649220" class="text-gray-400 hover:text-white transition text-lg block">+420 797 649 220</a>
         </div>
     </div>
 
